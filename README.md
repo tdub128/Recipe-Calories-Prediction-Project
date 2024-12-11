@@ -1,1 +1,1 @@
-# Recipe-Calories-Prediction-Project
+Interpreting Categorical Features on Recipes to Study and Make Predictions on Their Nutritional Components
