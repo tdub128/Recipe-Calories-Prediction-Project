@@ -71,5 +71,22 @@ Here are the head of the dataframe we used for our analysis. The cleaned datafra
 | millionaire pound cake               | ['time-to-make', 'course', 'cuisine', 'preparation', 'occasion', 'north-american', 'desserts', 'american', 'southern-united-states', 'dinner-party', 'holiday-event', 'cakes', 'dietary', 'christmas', 'thanksgiving', 'low-sodium', 'low-in-something', 'taste-mood', 'sweet', '4-hours-or-less'] |       120 | why a millionaire pound cake?  because it's super rich!  this scrumptious cake is the pride of an elderly belle from jackson, mississippi.  the recipe comes from "the glory of southern cooking" by james villas.                                                                                                                                                                | ['butter', 'sugar', 'eggs', 'all-purpose flour', 'whole milk', 'pure vanilla extract', 'almond extract']                                                                                                                                | ['878.3', '63.0', '326.0', '13.0', '20.0', '123.0', '39.0'] |         7 |         326 |            5 |
 | 2000 meatloaf                        | ['time-to-make', 'course', 'main-ingredient', 'preparation', 'main-dish', 'potatoes', 'vegetables', '4-hours-or-less', 'meatloaf', 'simply-potatoes2']                                                                                                                                             |        90 | ready, set, cook! special edition contest entry: a mediterranean flavor inspired meatloaf dish. featuring: simply potatoes - shredded hash browns, egg, bacon, spinach, red bell pepper, and goat cheese.                                                                                                                                                                         | ['meatloaf mixture', 'unsmoked bacon', 'goat cheese', 'unsalted butter', 'eggs', 'baby spinach', 'yellow onion', 'red bell pepper', 'simply potatoes shredded hash browns', 'fresh garlic', 'kosher salt', 'white pepper', 'olive oil'] | ['267.0', '30.0', '12.0', '12.0', '29.0', '48.0', '2.0']    |        17 |          12 |            5 |
 
+
+### Univariate Analysis
+
+In this analysis, I plan to explore the distribution of average ratings for the recipes to understand how recipes are generally rated through the following aspects:
+
+1. **Impact of Advertising Words on Ratings:**  
+   Investigate whether the presence of advertising words in recipe names influences their ratings. This will help determine if promotional language affects user perception.
+   <iframe
+   	 src="assets/ad_words_dist.html"
+  	 width="800"
+  	 height="600"
+  	 frameborder="0"
+   ></iframe>
+
+2. **Difference in Ratings Between Advertised and Healthy Recipes:**  
+   Compare the ratings of recipes that advertise themselves versus those that claim to be healthy. This analysis will reveal whether users rate "healthy" recipes differently from "advertised" recipes.
+
 ---
-ohhhhhh
+
