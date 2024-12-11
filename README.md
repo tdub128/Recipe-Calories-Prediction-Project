@@ -221,3 +221,242 @@ The null hypothesis is rejected (p = 0.037), suggesting a statistically signific
  height="600"
  frameborder="0"
 ></iframe>
+
+## Hypothesis testing
+As shown earlier, we identified recipes with names or tags related to some "healthy" terms. I performed the following permutation test, to examine whether there is a true significant difference in the nutritional composistion between the two groups.
+
+### Permutation Test to Compare Nutritional Composition of Recipes Claimed to be "Healthy" vs. Recipes not Claimed to be "Healthy" Recipes
+
+#### Null Hypothesis (H_0):
+The nutritional compositions of recipes claimed to be "healthy" are not significantly different from those of recipes not claimed to be "healthy." Any observed difference is due to random chance.
+
+#### Alternative Hypothesis (H_a):
+The nutritional compositions of recipes claimed to be "healthy" are significantly different from those of recipes not claimed to be "healthy."
+
+#### Test Statistic:
+The Total Variation Distance (TVD) between the normalized nutritional distributions of "healthy" and non-"healthy" recipes
+
+#### Significance Level (\(\alpha\)):
+The significance level is set to 0.05. If the p-value is less than or equal to 0.05, the null hypothesis is rejected, suggesting a significant difference in nutritional compositions.
+
+#### Results:
+- **Observed TVD**: 0.0299
+- **P-value**: 0.0
+
+#### Conclusion:
+Based on the results:
+- \(p < 0.05\): Reject the null hypothesis. Based on the dataset I have collected, recipes claimed to be "healthy" indeed have significantly different nutritional compositions compared to non-"healthy" recipes.
+
+#### Justification for Choices:
+1. **Test Statistic (TVD)**: TVD is an appropriate choice as it measures the overall difference between two probability distributions, providing a clear and interpretable metric for nutritional comparisons.
+2. **Significance Level (alpha)**: A standard level of 0.05 balances the risk of Type I and Type II errors, ensuring the results are both robust and interpretable.
+3. **Permutation Test**: This non-parametric approach makes no assumptions about the data's distribution, making it ideal for comparing groups with potentially non-normal or complex distributions.
+<iframe
+ src="asset/hp.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+## Prediction Problem
+My overall objective for this study is to predict recipes' nutritional compositions without looking at given relavent data. However, for simplicity, I propose to develop a classifier that predicts the sugar level of a recipe.
+
+**Prediction Problem:**  
+The task is to predict the sugar level category (`Low`, `Moderate`, `High`) for a recipe based on its features without looking at the nutritional components. Features used in training the model includes textual features, such as ingredients, steps, description, and tags; as well as categorical numerical features such as minutes, rating average, n_steps, and n_ingredients. 
+
+**Type:**  
+This is a **multiclass classification** problem because the response variable (`sugar_category`) has three distinct categories (`Low`, `Moderate`, `High`).
+
+---
+
+### Response Variable
+**Response Variable:**  
+The response variable is `sugar_category`, which indicates the level of sugar in a recipe.  
+**Reason for Choosing It:**  
+Predicting the sugar category simplifies the problem by converting a continuous variable (`sugar %`) into interpretable categories based on scientifically defined thresholds. These thresholds align with health guidelines, such as those from the World Health Organization (WHO) and the Dietary Guidelines for Americans 2020–2025. 
+
+**Categorization Approach:**  
+- **Low Sugar:** Recipes with sugar levels ≤ 25 grams, corresponding to ≤5% of total daily calories for a 2,000-calorie diet.  
+- **Moderate Sugar:** Recipes with sugar levels >25 grams and ≤50 grams, corresponding to >5% and ≤10% of total daily calories.  
+- **High Sugar:** Recipes with sugar levels >50 grams, corresponding to >10% of total daily calories.  
+
+This categorization was chosen to make predictions more actionable and meaningful for dietary planning, while also simplifying the challenge of predicting continuous data.
+
+---
+
+### Evaluation Metric
+**Metric:**  
+We use the **F1-score** to evaluate the model's performance.  
+
+**Reason for Choosing F1-score:**  
+The F1-score is chosen because it balances precision and recall, which is crucial in this context. The dataset may have imbalanced class distributions (e.g., more `Low` sugar recipes than `High`), and accuracy alone could mislead by favoring the majority class. The F1-score ensures that the classifier's performance is evaluated comprehensively across all categories, especially for minority classes.
+
+## Baseline Model
+### Model Explanation
+
+The baseline model uses textual features `ingredients`, `steps` and numerical features `n_steps`, `n_ingredients`. 
+
+---
+
+### Textual Feature Engineering
+
+**1. Text Cleaning:**  
+The text data from `ingredients`, `steps` columns is preprocessed using a custom function:
+- All text is converted to lowercase.
+- Non-alphanumeric characters are removed.  
+This ensures consistency and simplifies the analysis.
+
+**2. Feature Selection with TF-IDF and Correlation:**  
+- TF-IDF (Term Frequency-Inverse Document Frequency) is applied to the cleaned text to quantify word importance. This approach gives higher importance to unique and relevant words in the context of sugar prediction.
+- The top features (words) that correlate most strongly with sugar levels are identified using correlation analysis (`f_regression`).
+
+**3. Binary Feature Creation:**  
+For the selected top words from each textual feature (e.g., `ingredients`, `steps`), binary columns are created to indicate whether a recipe contains each word. These binary features form part of the final dataset.
+
+---
+
+### Numerical Features
+Two numerical features are included:
+- **`n_steps`:** Number of steps in the recipe.
+- **`n_ingredients`:** Number of ingredients used.
+
+These features help capture recipe complexity, which may influence sugar levels.
+
+---
+
+### Model Pipeline
+1. **Preprocessing:**  
+   - Standardize numerical features using `StandardScaler`.
+   - Pass binary features as they are.  
+2. **Classification:**  
+   A `RandomForestClassifier` is trained on the transformed data to predict sugar categories.
+
+---
+
+### Model Evaluation
+The model evaluates performance using:
+- **Accuracy:** 0.63
+- **Classification Report:** Includes precision, recall, and F1-score for each sugar category, providing insights into model performance across all classes.
+
+---
+
+### Summary
+           precision    recall  f1-score   support
+
+    High       0.61      0.59      0.60      4887
+     Low       0.68      0.81      0.74      8897
+    Moderate   0.25      0.13      0.17      2973
+
+    accuracy                       0.63     16757
+
+##### The classifier achieves an overall accuracy of 63%. The `Low` sugar category has the highest precision and recall, making it the easiest class to predict accurately. The `Moderate` category has the lowest performance, likely due to fewer examples and overlap with other categories. This model combines textual and numerical features to predict sugar levels effectively, given that although textual features like ingredients do provide some indication to sugar level, there isn't direct reflections such as how much ingredients are used. Therefore I'm satisfied with the accuracy for the baseline model.
+
+## Final Model
+### Additional Features to Improve the Baseline Model
+
+Following the same feature engineering procedure, I included the additional textual features `descriptions` and `tags`, as there is likely to be words with indication of sugar level existed in these two features such as sweet, or dessert.
+
+---
+
+### Hyperparameter Tuning to Improve the Baseline Model
+
+To optimize the RandomForestClassifier, I used **GridSearchCV** to examine and choose the best hyperparameters. This process systematically evaluates combinations of parameters and selects the configuration that maximizes model performance. The goal was to improve the classifier's ability to predict sugar categories (`Low`, `Moderate`, `High`).
+
+---
+
+### Hyperparameter Search Space
+
+The following hyperparameters were examined:
+- **`n_estimators`**: Number of trees in the forest. Tested values: `[50, 100, 200]`.
+- **`max_depth`**: Maximum depth of each tree. Tested values: `[None, 10, 20]`.
+- **`min_samples_split`**: Minimum number of samples required to split an internal node. Tested values: `[2, 5, 10]`.
+- **`min_samples_leaf`**: Minimum number of samples required to be at a leaf node. Tested values: `[1, 2, 4]`.
+
+These parameters influence the complexity and generalization of the model. A broader range of values was tested to balance underfitting and overfitting.
+
+---
+
+### Procedure
+
+1. **Train-Test Split:**  
+   I split the dataset into training and testing sets. An additional split of the training data was used for hyperparameter optimization.
+   
+2. **Data Transformation:**  
+   Both the training and testing datasets were preprocessed using a pipeline that:
+   - Standardized numerical features (`rating_avg`, `n_steps`, `n_ingredients`).
+   - Passed binary features unchanged (`contains_<word>` columns from ingredients, steps, description, and tags).
+
+3. **GridSearchCV Setup:**  
+   I used **GridSearchCV** with 5-fold cross-validation to evaluate combinations of hyperparameters, optimizing for **accuracy**.
+
+4. **Model Training and Selection:**  
+   The best-performing hyperparameters were selected based on the highest cross-validated accuracy.
+
+---
+
+### Results
+
+The best parameters identified by GridSearchCV were:
+
+***{'max_depth': 20, 'min_samples_leaf': 1, 'min_samples_split': 10, 'n_estimators': 200}***
+
+               precision    recall  f1-score   support
+
+        High       0.67      0.73      0.69      4887
+         Low       0.71      0.90      0.79      8897
+    Moderate       0.40      0.04      0.07      2973
+
+    accuracy                           0.69     16757
+
+##### Hyperparameter tuning via GridSearchCV significantly improved the model's ability to predict sugar categories, particularly for Low and High sugar recipes. In addition, however, with an increase in overall accuracy of 6%, the f1-score for moderate sugar level prediction has decreased by 10 percent. This may be due to overlap with Low and High categories or fewer samples in this class created in the second split. 
+
+### Fairness Analysis
+
+In this fairness analysis, I evaluated whether the model performs equally well across recipes categorized by their caloric content. Specifically, I examined if the precision for recipes with high calories is comparable to the precision for recipes with low calories.
+
+---
+
+#### Methodology
+
+1. **Grouping Recipes by Caloric Content**:  
+   - Recipes were divided into two groups: **high calorie** and **low calorie**.
+   - Threshold: Recipes with calories > 301.1 were designated as high calorie, and those ≤ 301.1 were considered low calorie.  
+   - The median value (301.1) was chosen as the threshold because the distribution of calories was skewed with many high outliers, making the median a more robust measure than the mean.
+
+2. **Evaluation Metric - Precision Parity**:  
+   - I chose precision as the metric for fairness evaluation to ensure that the model correctly identifies true positives (correctly labeled recipes) out of all predicted positives for each group.  
+   - This is important because false positives could mislead users by incorrectly labeling recipes, especially for low-calorie recipes that may appeal to health-conscious individuals.
+
+3. **Hypotheses**:
+   - **Null Hypothesis:** The model is fair. Its precision for high-calorie and low-calorie recipes is approximately the same, and any observed differences are due to random chance.
+   - **Alternative Hypothesis:** The model is unfair. Precision for low-calorie recipes is lower than for high-calorie recipes.
+
+4. **Test Statistic**:  
+   - The difference in precision
+
+5. **Significance Level**:  
+   - A significance level of alpha = 0.05 was used to evaluate the results.
+
+6. **Permutation Test**:  
+   - To test the hypotheses, I shuffled the `is_high_calories` labels 1000 times to simulate the distribution of precision differences under the null hypothesis.  
+   - The observed statistic (-0.023) was compared to this distribution to calculate the p-value.
+<iframe
+ src="asset/fair.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+---
+
+#### Results
+
+- **Observed Statistic:** The observed difference in precision was **-0.0285**.  
+- **P-value:** After running the permutation test, the p-value was **0.118**.  
+  - This p-value indicates that the observed difference could plausibly occur under the null hypothesis.
+
+---
+
+#### Conclusion
+
+Based on the p-value of **0.055** (greater than 0.05), I fail to reject the null hypothesis. This suggests that the precision for high-calorie and low-calorie recipes is not significantly different, and the observed disparity is likely due to random chance. Thus, the model demonstrates fairness in terms of precision across recipes categorized by caloric content.
