@@ -102,7 +102,7 @@ The following advertising words were extracted from recipe names to analyze thei
 2. **Difference in Ratings Between Advertised and Healthy Recipes:**  
    Compare the ratings of recipes that advertise themselves versus those that claim to be healthy. This analysis will reveal whether users rate "healthy" recipes differently from "advertised" recipes.
 <iframe
- src="asset/healthy_ad.html.html"
+ src="asset/healthy_ad.html"
  width="1000"
  height="600"
  frameborder="0"
@@ -131,7 +131,7 @@ Since sugar level is selected as the prediction response variable, I analyzed th
 3. **Number of Ingredients (`n_ingredients`):** The total number of ingredients used in a recipe.
 
 <iframe
- src="asset/minutes.html.html"
+ src="asset/minutes.html"
  width="1000"
  height="600"
  frameborder="0"
@@ -141,7 +141,7 @@ Since sugar level is selected as the prediction response variable, I analyzed th
   The plot shows a weak correlation between sugar level and cooking time, suggesting that sugar levels are relatively consistent regardless of preparation duration.
 
 <iframe
- src="asset/n_steps.html.html"
+ src="asset/n_steps.html"
  width="1000"
  height="600"
  frameborder="0"
@@ -151,7 +151,7 @@ Since sugar level is selected as the prediction response variable, I analyzed th
   Recipes with higher sugar levels tend to have slightly fewer steps. This could indicate that simpler recipes, such as desserts, are more likely to contain higher sugar levels.
 
 <iframe
- src="asset/n_ingredients.html.html"
+ src="asset/n_ingredients.html"
  width="1000"
  height="600"
  frameborder="0"
@@ -160,3 +160,64 @@ Since sugar level is selected as the prediction response variable, I analyzed th
 - **Sugar Level vs. Number of Ingredients (`n_ingredients`):**  
   Recipes with fewer ingredients tend to have higher sugar levels. This aligns with the notion that simpler recipes, particularly desserts or snacks, often rely on sugar as a primary ingredient.
 
+## Step 3: Assessment of Missingness
+In the cleaned dataset, only three variables contain missing values:
+
+- **Name:** 1 missing value  
+- **Descriptions:** 70 missing values  
+- **Average Rating (`average_rating`):** 2609 missing values  
+
+#### Handling Missing Values
+The number of missing values in `name` and `description` is insignificant compared to the overall dataset size and does not contribute significantly to the study's objectives. Therefore, the analysis focuses only on the missing values in `average_rating`.
+
+#### NCMR
+Given the only feature with missing values to analyze is average_rating, I propose to use this section to discuss how this feature could be characterized as *NMAR* and how it could also be potentially *MAR*. As described in the data cleaning section, ratings of 0 are converted to NaN because it indicates that the reviewers didn't give a rating to the recipe. Therefore, the missing of rating is caused by the feature itself that the reviewer didn't perform rating. However, at the same time, it could be argued that the reviewers refused to give rating because the recipe isn't great nor is it bad, as people tend to express whether they like or dislike something.
+
+#### Analysis of Missing Feature
+Again, given the only feature with missing values to analyze is average_rating, analysis is performed between average_rating and other columns. Permutation test results between calories, as well as, minutes based on missingness of average rating are shown as summarized in detail below. However, after performing permutaion tests on all numerical columns, there isn't a test result that fails to reject the hypothesis that missing of rating_avg depends on the column. Therefore test result of minute is shown as it had the highest p-value.
+
+#### Permutation Test to Analyze Dependency of Missingness of `rating_avg` on `calories`
+
+##### Null Hypothesis (H_0):
+The missingness of `rating_avg` is independent of `calories`. In other words, there is no relationship between whether `rating_avg` is missing and the values of `calories`.
+
+##### Alternative Hypothesis (H_a):
+The missingness of `rating_avg` depends on `calories`. This implies that recipes with missing `rating_avg` have systematically different `calories` compared to those without missing values.
+
+##### Test Statistic:
+The test statistic is the difference in mean `calories` between mission and non-missing recipes
+
+##### Significance Level (alpha):
+The significance level is set to 0.05. 
+
+##### Conclusion: 
+The null hypothesis is rejected (p = 0.0), suggesting a statistically significant dependency between the missingness of rating_avg and minutes, based on the data collected.
+<iframe
+ src="asset/missing1.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+#### Permutation Test to Analyze Dependency of Missingness of `rating_avg` on `minutes`
+
+##### Null Hypothesis (H_0):
+The missingness of `rating_avg` is independent of `minutes`. In other words, there is no relationship between whether `rating_avg` is missing and the values of `minutes`.
+
+##### Alternative Hypothesis (H_a):
+The missingness of `rating_avg` depends on `minutes`. This implies that recipes with missing `rating_avg` have systematically different `minutes` compared to those without missing values.
+
+##### Test Statistic:
+The test statistic is the difference in mean `minutes` between mission and non-missing recipes
+
+##### Significance Level (alpha):
+The significance level is set to 0.05.
+
+##### Conclusion:
+The null hypothesis is rejected (p = 0.037), suggesting a statistically significant dependency between the missingness of `rating_avg` and `minutes`, based on the data collected.
+<iframe
+ src="asset/missing2.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
