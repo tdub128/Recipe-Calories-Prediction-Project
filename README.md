@@ -78,15 +78,85 @@ In this analysis, I plan to explore the distribution of average ratings for the 
 
 1. **Impact of Advertising Words on Ratings:**  
    Investigate whether the presence of advertising words in recipe names influences their ratings. This will help determine if promotional language affects user perception.
-   <iframe
-   	 src="asset/ad_words_dist.html"
-  	 width="800"
-  	 height="600"
-  	 frameborder="0"
-   ></iframe>
+<iframe
+ src="asset/ad_words_dist.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+#### Identified Advertising Words
+The following advertising words were extracted from recipe names to analyze their impact on recipe popularity and ratings:
+
+- **Advertising Words:**  
+  `"top"`, `"great"`, `"perfect"`, `"ultimate"`, `"finest"`, `"supreme"`, `"premium"`,  
+  `"delicious"`, `"amazing"`, `"favorite"`, `"choice"`, `"exceptional"`, `"outstanding"`,  
+  `"fantastic"`, `"award-winning"`, `"signature"`, `"classic"`, `"legendary"`,  
+  `"irresistible"`, `"heavenly"`, `"famous"`, `"perfected"`, `"all-time"`, `"best"`
+
+#### Observations
+- Recipes that include advertising words such as **"best"** or **"exceptional"** in their names tend to be **slightly more popular** compared to those without such words.
+- Despite this, the **distribution of average ratings** between recipes with and without advertising words is **very similar**, indicating that promotional language does not significantly affect user ratings.
+
 
 2. **Difference in Ratings Between Advertised and Healthy Recipes:**  
    Compare the ratings of recipes that advertise themselves versus those that claim to be healthy. This analysis will reveal whether users rate "healthy" recipes differently from "advertised" recipes.
+<iframe
+ src="asset/healthy_ad.html.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
 
----
+#### Identified Healthy-Related Words
+In addition to analyzing advertised recipes, I also identified recipe names containing terms related to health and wellness. These include:
+
+- **Healthy-Related Words:**  
+  `"healthy"`, `"fit"`, `"low-fat"`, `"low-carb"`, `"low-sugar"`, `"fat-free"`, `"sugar-free"`,  
+  `"carb-free"`, `"gluten-free"`, `"dairy-free"`, `"plant-based"`, `"organic"`, `"heart-healthy"`,  
+  `"anti-inflammatory"`, `"weight-loss"`, `"energy-boosting"`
+
+#### Observations
+- Recipes promoting themselves as **advertised** (e.g., with words like "best" or "exceptional") have **distinctively higher ratings** compared to recipes with healthy-related terms.
+- Advertised recipes show a significantly higher frequency of **average ratings of 5**, whereas recipes with healthy-related terms are less likely to achieve this top rating.
+- This suggests that while recipes labeled as healthy may appeal to a specific audience, they do not receive ratings as high as their advertised counterparts.
+
+### Bivariate Analysis: Sugar Level and Numerical Variables
+
+Since sugar level is selected as the prediction response variable, I analyzed the relationship between sugar level and some key numerical variables mentioned in the introduction. Identifying these correlations can assist in the feature engineering process for building a robust prediction model.
+
+#### Numerical Variables Analyzed:
+1. **Minutes (Cooking Time):** The total time required to prepare and cook a recipe.
+2. **Number of Steps (`n_steps`):** The number of steps involved in the recipe instructions.
+3. **Number of Ingredients (`n_ingredients`):** The total number of ingredients used in a recipe.
+
+<iframe
+ src="asset/minutes.html.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+- **Sugar Level vs. Minutes (Cooking Time):**  
+  The plot shows a weak correlation between sugar level and cooking time, suggesting that sugar levels are relatively consistent regardless of preparation duration.
+
+<iframe
+ src="asset/n_steps.html.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+- **Sugar Level vs. Number of Steps (`n_steps`):**  
+  Recipes with higher sugar levels tend to have slightly fewer steps. This could indicate that simpler recipes, such as desserts, are more likely to contain higher sugar levels.
+
+<iframe
+ src="asset/n_ingredients.html.html"
+ width="1000"
+ height="600"
+ frameborder="0"
+></iframe>
+
+- **Sugar Level vs. Number of Ingredients (`n_ingredients`):**  
+  Recipes with fewer ingredients tend to have higher sugar levels. This aligns with the notion that simpler recipes, particularly desserts or snacks, often rely on sugar as a primary ingredient.
 
