@@ -79,7 +79,7 @@ In this analysis, I plan to explore the distribution of average ratings for the 
 1. **Impact of Advertising Words on Ratings:**  
    Investigate whether the presence of advertising words in recipe names influences their ratings. This will help determine if promotional language affects user perception.
    <iframe
-   	 src="assets/ad_words_dist.html"
+   	 src="asset/ad_words_dist.html"
   	 width="800"
   	 height="600"
   	 frameborder="0"
